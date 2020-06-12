@@ -1,3 +1,3 @@
 # Octoprint_Z_probe_offset
 
-Octoprint plugin adding Z probe offset setting on Marlin based 3d printers
+Octoprint plugin adding Z probe offset setting on 3d printers using Marlin firmware

@@ -1,0 +1,14 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "script",
+        "ecmaFeatures": {
+            "jsx": true,
+            "legacyDecorators": true
+        }
+    },
+    "rules": {
+        "no-extra-semi": 1,
+        "semi": 0
+    }
+}

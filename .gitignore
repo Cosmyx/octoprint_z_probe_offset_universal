@@ -1,0 +1,6 @@
+*.pyc
+*.egg-info
+src/node_modules*
+src/yarn.lock
+src/yarn-error.log
+src/package-lock.json

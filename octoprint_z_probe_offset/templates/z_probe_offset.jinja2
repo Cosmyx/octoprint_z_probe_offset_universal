@@ -1,0 +1,24 @@
+<div id="generic_plugin_z_probe_offset" class="hide">
+  <div style="text-align: left; position: absolute;" class="z_probe_offset jog-panel"><small><a href="#" data-bind="toggleContent: { class: 'fa-caret-right fa-caret-down',
+                                                  parent: '.z_probe_offset', container: '.hide' }" class="muted"><i class="fa fa-caret-right"></i><span style="margin-left:.25rem;">{{ _('Z probe offset:') }}</span><span data-bind="html: z_probe_offset.offsetVal.actual() + 'mm'" style="margin-left:.25rem;"></span></a></small>
+    <div style="text-align: left;" class="hide">
+      <div data-bind="visible: !z_probe_offset.error.probe()" class="input-prepend input-append">
+        <button type="button" title="{{ _('Decrease z offset') }}" data-bind="click: z_probe_offset.increase(false),
+                     enable: isOperational() && loginState.hasPermissionKo(access.permissions.CONTROL)()" class="btn btn-input-dec"><i class="fa fa-minus"></i>
+        </button>
+        <input type="number" title="{{ _('Z probe offset value') }}" style="text-align: center" data-bind="value: z_probe_offset.offsetVal.edited, valueUpdate: 'input',
+                     enable: isOperational() && loginState.hasPermissionKo(access.permissions.CONTROL)(),
+                     style: { 'background-color': z_probe_offset.error.offset() ? 'red' : '' }" class="input-mini input-nospin"/>
+        <button type="button" title="{{ _('Increase z offset') }}" data-bind="click: z_probe_offset.increase(true),
+                     enable: isOperational() && loginState.hasPermissionKo(access.permissions.CONTROL)()" class="btn btn-input-inc"><i class="fa fa-plus"></i>
+        </button>
+        <button style="margin-left: .25rem; border-radius: 4px;" data-bind="click: z_probe_offset.set(),
+                     enable: z_probe_offset.submit_enabled()" class="btn btn-primary"><i class="fa fa-pencil"></i>
+        </button>
+      </div>
+      <div style="background-color:red; color: white; border-radius: 4px; padding: .1rem 1rem;" data-bind="visible: z_probe_offset.error.offset(), html: z_probe_offset.error.offset()" class="error"></div>
+      <div style="background-color:red; color: white; border-radius: 4px; padding: .1rem 1rem;" data-bind="visible: z_probe_offset.error.probe()" class="error">{{ _('No available probe found') }}
+      </div>
+    </div>
+  </div>
+</div>
