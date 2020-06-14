@@ -1,0 +1,41 @@
+# Spanish (Spain) translations for Z Probe Offset Control.
+# Copyright (C) 2020 The OctoPrint Project
+# This file is distributed under the same license as the Z Probe Offset
+# Control project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Z Probe Offset Control 0.1\n"
+"Report-Msgid-Bugs-To: i18n@octoprint.org\n"
+"POT-Creation-Date: 2020-06-14 10:55+0200\n"
+"PO-Revision-Date: 2020-06-14 11:04+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: es_ES\n"
+"Language-Team: es_ES <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+
+#: octoprint_z_probe_offset/templates/z_probe_offset.jinja2:3
+msgid "Z probe offset:"
+msgstr "Desplazamiento de la sonda Z:"
+
+#: octoprint_z_probe_offset/templates/z_probe_offset.jinja2:6
+msgid "Decrease z offset"
+msgstr "Disminuir z offset"
+
+#: octoprint_z_probe_offset/templates/z_probe_offset.jinja2:9
+msgid "Z probe offset value"
+msgstr "Valor de desplazamiento de la sonda Z"
+
+#: octoprint_z_probe_offset/templates/z_probe_offset.jinja2:12
+msgid "Increase z offset"
+msgstr "Aumentar el desplazamiento z"
+
+#: octoprint_z_probe_offset/templates/z_probe_offset.jinja2:20
+msgid "No available probe found"
+msgstr "No se encontró sonda disponible"
+
