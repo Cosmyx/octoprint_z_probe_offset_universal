@@ -26,10 +26,13 @@ class _VersionCheck:
         response = req.json()
         if not response or not isinstance(response, list):
             return None
-        remote_version = response[0]['tag_name']
-        if not remote_version.replace('.', '').isdigit():
+        tag_map = map(lambda r: r['tag_name'], response)
+        release_map = filter(lambda v: v.replace('.', '').isdigit(), tag_map)
+        release_map = list(map(float, release_map))
+        release_map.sort(reverse=True)
+        if not release_map:
             return None
-        return remote_version
+        return str(release_map[0])
 
     @classmethod
     def get_latest(cls, target, check, full_data=False, online=True):
