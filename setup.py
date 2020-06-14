@@ -6,7 +6,11 @@ plugin_identifier = 'z_probe_offset'
 plugin_package = 'octoprint_z_probe_offset'
 plugin_name = 'Z Probe Offset Control'
 plugin_version = '0.1'
-plugin_description = ('Control the z probe offset on marlin based printers')
+plugin_description = ('Control the z probe offset on marlin based printers.\n'
+                      + 'Warning: this plugin is on it\'s early stage of '
+                      + 'developpement. Use with caution and please report any'
+                      + 'issues using the git repository. Improvement '
+                      + 'suggestions are welcome as well.')
 plugin_author = 'razer'
 plugin_author_email = 'razerraz@free.fr'
 plugin_url = 'https://framagit.org/razer/octoprint_z_probe_offset'
