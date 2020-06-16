@@ -74,7 +74,6 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
         return dict(js=['%s.js' % self._identifier])
 
     def on_api_get(self, unused_request):
-        self._logger.info('ON API GET')
         return flask.jsonify(printer_cap=self.printer_cap,
                              z_offset=self.z_offset)
 
@@ -100,7 +99,7 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
         self._logger.info('Z probe offset is now %s', z_offset)
 
     def on_printer_gcode_sent(self, comm, phase, cmd, cmd_type, gcode, *args,
-                              subcode=None, tags=None, **kwargs):
+                              **kwargs):
         # pylint: disable=too-many-arguments, unused-argument
         if gcode and 'm851' in gcode.lower() and cmd.replace(gcode, ''):
             self._logger.debug('Setting z probe offset from user command %s',
