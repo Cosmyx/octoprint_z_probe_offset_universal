@@ -22,7 +22,7 @@ class ZProbeOffsetViewModel {
       this.offsetVal.actual(data.msg)
     else if (data.type == 'printer_cap') {
       let printer_cap = JSON.parse(data.msg)
-      this.error.probe(printer_cap.z_probe == 0 ? true : false)
+      this.error.probe(printer_cap.z_probe == 1 ? false : true)
     }
     else if (data.type == 'offset_error') {
       this.error.offset(data.msg)
