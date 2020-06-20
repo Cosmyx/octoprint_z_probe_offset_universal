@@ -57,6 +57,8 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
         self._plugin_version = self._version
         self.z_offset = None
         self.printer_cap = {'eeprom': None, 'z_probe': None}
+        self.prusa_firmware = False
+        self.prusa_zoffset_following = False
 
     def get_update_information(self):
         return dict(Z_probe_offset=dict(
@@ -77,12 +79,16 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
         return flask.jsonify(printer_cap=self.printer_cap,
                              z_offset=self.z_offset)
 
-    def on_event(self, event, unused_payload):
+    def on_event(self, event, payload):
         if event == 'Disconnected':
             self.printer_cap = {'eeprom': None, 'z_probe': None}
             self._send_message('printer_cap', json.dumps(self.printer_cap))
-        if event == 'Connected':
+        elif event == 'Connected':
             self._printer.commands(['M851'])
+        elif event == Events.FIRMWARE_DATA:
+            self._logger.debug('Get firmware data: %s - %s',
+                               payload.get('name'), payload.get('data'))
+            self.prusa_firmware = 'prusa' in payload.get('name').lower()
 
     def set_z_offset_from_printer_response(self, offset):
         offset = offset.replace(' ', '')
@@ -128,6 +134,11 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
 
     def on_printer_gcode_received(self, comm, line, *args, **kwargs):
         # pylint: disable=unused-argument
+        if self.prusa_zoffset_following:
+            self.prusa_zoffset_following = False
+            self._logger.debug('Z offset value (prusa): %s', line)
+            self.set_z_offset_from_printer_response(line)
+            return line
         if len(line) < 3:
             return line
         line_lower = line.lower()
@@ -139,17 +150,19 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
             # Creality3D Marlin variant
             self._logger.debug('Using printer\'s z probe offset from %s', line)
             self.set_z_offset_from_printer_response(line.split('=')[-1])
-            return line
         elif 'probe z offset:' in line_lower:
             # Marlin 1.x
             self._logger.debug('Using printer\'s z probe offset from %s', line)
             self.set_z_offset_from_printer_response(line.split(':')[-1])
-            return line
+        elif 'z offset' in line_lower and self.prusa_firmware:
+            # Prusa firmware: Z offset value should be on next response
+            self._logger.debug(
+                'Prusa firmware detected, M851 response: z offset may follow')
+            self.prusa_zoffset_following = True
         elif 'm851' in line_lower or 'probe offset ' in line_lower:
             # Marlin 2.x
             self._logger.debug('Using printer\'s z probe offset from %s', line)
             self.set_z_offset_from_gcode(line.replace('probe offset', ''))
-            return line
         elif '?z out of range' in line_lower:
             self._logger.error('Setting z offset: %s', line)
             self._send_message('offset_error', line.replace('?', ''))
