@@ -53,7 +53,7 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
                             octoprint.plugin.TemplatePlugin):
 
     def initialize(self):
-        self._version = '0.2'
+        self._version = '0.3'
         self._plugin_version = self._version
         self.z_offset = None
         self.printer_cap = {'eeprom': None, 'z_probe': None}
