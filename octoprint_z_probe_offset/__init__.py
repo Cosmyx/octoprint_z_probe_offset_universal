@@ -159,6 +159,9 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
             self._logger.debug(
                 'Prusa firmware detected, M851 response: z offset may follow')
             self.prusa_zoffset_following = True
+        elif 'z offset' in line_lower:
+            self._logger.debug('CR3D variant echo to M851Z[VALUE]: %s', line)
+            self.set_z_offset_from_printer_response(line.split(' ')[-1])
         elif 'm851' in line_lower or 'probe offset ' in line_lower:
             # Marlin 2.x
             self._logger.debug('Using printer\'s z probe offset from %s', line)
