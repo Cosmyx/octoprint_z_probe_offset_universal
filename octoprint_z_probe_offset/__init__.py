@@ -84,19 +84,30 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
         if event == 'Connected':
             self._printer.commands(['M851'])
 
+    def set_z_offset_from_printer_response(self, offset):
+        offset = offset.replace(' ', '')
+        if not offset:
+            self._logger.warning('Offset part is empty !')
+            return
+        if not offset.replace('-', '', 1).replace('.', '', 1).isdigit():
+            self._logger.warning('Unable to extract Z offset from "%s"', offset)
+            return
+        self._logger.info('Z probe offset is now %s', offset)
+        if not self.printer_cap['z_probe']:
+            self._logger.warning('Set printer\'s z probe cap as enabled, M115 '
+                                 + 'firmware response supposed buggy')
+            self.printer_cap['z_probe'] = 1
+            self._send_message('printer_cap', json.dumps(self.printer_cap))
+        self.z_offset = float(offset)
+        self._send_message('z_offset', self.z_offset)
+
     def set_z_offset_from_gcode(self, line):
         offset_map = line.lower().replace('m851', '').split()
         z_part = list(filter(lambda v: v.startswith('z'), offset_map))
         if not z_part:
             self._logger.warning('Bad M851 response: %s', line)
             return
-        z_offset = z_part[0][1:]
-        if not z_offset.replace('.', '', 1).replace('-', '', 1).isdigit():
-            self._logger.warning('Unable to extract Z offset from "%s"', line)
-            return
-        self.z_offset = float(z_offset)
-        self._send_message('z_offset', float(z_offset))
-        self._logger.info('Z probe offset is now %s', z_offset)
+        self.set_z_offset_from_printer_response(z_part[0][1:])
 
     def on_printer_gcode_sent(self, comm, phase, cmd, cmd_type, gcode, *args,
                               **kwargs):
@@ -124,10 +135,16 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
             cap_populated = self.populate_printer_cap(line)
             if cap_populated:
                 self._send_message('printer_cap', json.dumps(self.printer_cap))
+        elif 'zprobe_zoffset' in line_lower:
+            # Creality3D Marlin variant
+            self._logger.debug('Using printer\'s z probe offset from %s', line)
+            self.set_z_offset_from_printer_response(line.split('=')[-1])
+            return line
         elif 'probe z offset:' in line_lower:
             # Marlin 1.x
             self._logger.debug('Using printer\'s z probe offset from %s', line)
-            self.z_offset = float(line.split(':')[-1])
+            self.set_z_offset_from_printer_response(line.split(':')[-1])
+            return line
         elif 'm851' in line_lower or 'probe offset ' in line_lower:
             # Marlin 2.x
             self._logger.debug('Using printer\'s z probe offset from %s', line)
