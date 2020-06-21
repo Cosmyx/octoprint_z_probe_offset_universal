@@ -91,7 +91,7 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
             self.prusa_firmware = 'prusa' in payload.get('name').lower()
 
     def set_z_offset_from_printer_response(self, offset):
-        offset = offset.replace(' ', '').replace('"', '').strip()
+        offset = offset.replace(' ', '').replace('"', '')
         if not offset:
             self._logger.warning('Offset part is empty !')
             return
@@ -119,8 +119,7 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
                               **kwargs):
         # pylint: disable=too-many-arguments, unused-argument
         if gcode and 'm851' in gcode.lower() and cmd.replace(gcode, ''):
-            self._logger.debug('Setting z probe offset from user command %s',
-                               cmd)
+            self._logger.debug('Setting z offset from user command %s', cmd)
             self.set_z_offset_from_gcode(cmd.replace(gcode, ''))
 
     def populate_printer_cap(self, line):
@@ -141,33 +140,25 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
             return line
         if len(line) < 3:
             return line
-        line_lower = line.lower()
+        line_lower = line.lower().strip()
         if 'cap:' in line_lower:
             cap_populated = self.populate_printer_cap(line)
             if cap_populated:
                 self._send_message('printer_cap', json.dumps(self.printer_cap))
         elif 'zprobe_zoffset' in line_lower:
-            # Creality3D Marlin variant
-            self._logger.debug('Using printer\'s z probe offset from %s', line)
+            self._logger.debug('CR3D M851 echo: %s', line)
             self.set_z_offset_from_printer_response(line.split('=')[-1])
         elif 'probe z offset:' in line_lower:
-            # Marlin 1.x
-            self._logger.debug('Using printer\'s z probe offset from %s', line)
+            self._logger.debug('Marlin 1.x M851 echo: %s', line)
             self.set_z_offset_from_printer_response(line.split(':')[-1])
-        elif 'z offset' in line_lower and self.prusa_firmware:
-            if 'z_min' in line_lower:
-                # Response to M851Z[VALUE] sequence
-                return line
-            # Prusa firmware: Z offset value should be on next response
-            self._logger.debug(
-                'Prusa firmware detected, M851 response: z offset may follow')
+        elif line_lower.endswith('z offset') and self.prusa_firmware:
+            self._logger.debug('Prusa M851 echo: z offset may follow')
             self.prusa_zoffset_following = True
         elif 'z offset' in line_lower:
             self._logger.debug('CR3D variant echo to M851Z[VALUE]: %s', line)
             self.set_z_offset_from_printer_response(line.split(' ')[-1])
         elif 'm851' in line_lower or 'probe offset ' in line_lower:
-            # Marlin 2.x
-            self._logger.debug('Using printer\'s z probe offset from %s', line)
+            self._logger.debug('Marlin 2.x M851 echo: %s', line)
             self.set_z_offset_from_gcode(line.replace('probe offset', ''))
         elif '?z out of range' in line_lower:
             self._logger.error('Setting z offset: %s', line)
