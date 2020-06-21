@@ -155,6 +155,9 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
             self._logger.debug('Using printer\'s z probe offset from %s', line)
             self.set_z_offset_from_printer_response(line.split(':')[-1])
         elif 'z offset' in line_lower and self.prusa_firmware:
+            if 'z_min' in line_lower:
+                # Response to M851Z[VALUE] sequence
+                return line
             # Prusa firmware: Z offset value should be on next response
             self._logger.debug(
                 'Prusa firmware detected, M851 response: z offset may follow')
