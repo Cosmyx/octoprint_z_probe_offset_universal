@@ -38,7 +38,7 @@ class ZProbeOffsetViewModel {
   set() {
     if (!this.submit_enabled()) return
     OctoPrint.control.sendGcode(`M851Z${this.offsetVal.edited()}`)
-    OctoPrint.control.sendGcode('M500')
+    setTimeout(() => {OctoPrint.control.sendGcode('M500')}, 1000)
   }
 
   submit_enabled() {

@@ -61,7 +61,9 @@ function () {
     value: function set() {
       if (!this.submit_enabled()) return;
       OctoPrint.control.sendGcode("M851Z".concat(this.offsetVal.edited()));
-      OctoPrint.control.sendGcode('M500');
+      setTimeout(function () {
+        OctoPrint.control.sendGcode('M500');
+      }, 1000);
     }
   }, {
     key: "submit_enabled",
