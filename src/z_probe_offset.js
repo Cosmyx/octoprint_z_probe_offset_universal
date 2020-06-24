@@ -43,7 +43,7 @@ class ZProbeOffsetViewModel {
 
   submit_enabled() {
     if (!this.control.isOperational() || this.control.isPrinting()) return false
-    if (!parseFloat(this.offsetVal.edited())) return false
+    if (isNaN(parseFloat(this.offsetVal.edited()))) return false
     if (this.offsetVal.edited() == this.offsetVal.actual()) return false
     return true
   }
