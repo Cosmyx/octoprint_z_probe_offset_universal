@@ -1,4 +1,7 @@
 # Changelog
+## [0.4] - 2020-07-28
+ - Fix bug: Can't set offset to 0 (c41e1748)
+
 ## [0.3] - 2020-06-23
  - Fix bug: Error message when no z probe found doesn't always show up (5bc0f06e)
  - Fix bug: Save to eeprom (M500) sometimes triggered before M851Z[Value] (75cbe940)
