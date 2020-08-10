@@ -91,7 +91,7 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
             self.prusa_firmware = 'prusa' in payload.get('name').lower()
 
     def set_z_offset_from_printer_response(self, offset):
-        offset = offset.replace(' ', '').replace('"', '')
+        offset = offset.strip().replace(' ', '').replace('"', '')
         if not offset:
             self._logger.warning('Offset part is empty !')
             return

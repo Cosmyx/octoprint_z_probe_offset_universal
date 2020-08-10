@@ -1,4 +1,7 @@
 # Changelog
+## [0.5] -
+ - Fix bug: Remove new line character from printer's responses (#8)
+
 ## [0.4] - 2020-07-28
  - Fix bug: Can't set offset to 0 (c41e1748)
 
