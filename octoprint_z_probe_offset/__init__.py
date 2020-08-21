@@ -88,7 +88,9 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
         elif event == Events.FIRMWARE_DATA:
             self._logger.debug('Get firmware data: %s - %s',
                                payload.get('name'), payload.get('data'))
-            self.prusa_firmware = 'prusa' in payload.get('name').lower()
+            firmware_name = payload.get('name')
+            if firmware_name:
+                self.prusa_firmware = 'prusa' in firmware_name.lower()
 
     def set_z_offset_from_printer_response(self, offset):
         offset = offset.strip().replace(' ', '').replace('"', '')
