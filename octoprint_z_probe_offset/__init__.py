@@ -125,7 +125,7 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
             self.set_z_offset_from_gcode(cmd.replace(gcode, ''))
 
     def populate_printer_cap(self, line):
-        cap = list(filter(lambda c: c in line.lower(), self.printer_cap))
+        cap = list(filter(lambda c: c in line, self.printer_cap))
         if not cap:
             return None
         cap = cap[0]
@@ -144,7 +144,7 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
             return line
         line_lower = line.lower().strip()
         if 'cap:' in line_lower:
-            cap_populated = self.populate_printer_cap(line)
+            cap_populated = self.populate_printer_cap(line_lower)
             if cap_populated:
                 self._send_message('printer_cap', json.dumps(self.printer_cap))
         elif 'zprobe_zoffset' in line_lower:
