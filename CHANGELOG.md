@@ -1,6 +1,8 @@
 # Changelog
 ## [0.5] -
  - Fix bug: Remove new line character from printer's responses (#8)
+ - Fix bug: crash on empty firmware name (5c454835)
+ - Generalize strip on printer responses (530b9e92)
 
 ## [0.4] - 2020-07-28
  - Fix bug: Can't set offset to 0 (c41e1748)
