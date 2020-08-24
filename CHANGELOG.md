@@ -1,5 +1,5 @@
 # Changelog
-## [0.5] -
+## [0.5] - 2020-08-24
  - Fix bug: Remove new line character from printer's responses (#8)
  - Fix bug: crash on empty firmware name (5c454835)
  - Generalize strip on printer responses (530b9e92)
