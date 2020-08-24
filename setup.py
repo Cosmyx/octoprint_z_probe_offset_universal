@@ -5,7 +5,7 @@ from setuptools import setup
 plugin_identifier = 'z_probe_offset'
 plugin_package = 'octoprint_z_probe_offset'
 plugin_name = 'Z Probe Offset Control'
-plugin_version = '0.4'
+plugin_version = '0.5'
 plugin_description = ('Control the z probe offset on marlin based printers.')
 plugin_author = 'razer'
 plugin_author_email = 'razerraz@free.fr'
