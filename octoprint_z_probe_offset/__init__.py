@@ -57,7 +57,11 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
         self._plugin_version = self._version
         self.z_offset = None
         self.printer_cap = {'eeprom': None, 'z_probe': None}
-        self.prusa_firmware = False
+        self.firmware_name = 'marlin'
+        self.get_command = 'M851'
+        self.set_command = 'M851'
+        self.set_command_z = self.set_command + 'Z'
+        self.save_command = 'M500'
         self.prusa_zoffset_following = False
 
     def get_update_information(self):
@@ -84,13 +88,18 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
             self.printer_cap = {'eeprom': None, 'z_probe': None}
             self._send_message('printer_cap', json.dumps(self.printer_cap))
         elif event == 'Connected':
-            self._printer.commands(['M851'])
+            if 'klipper' in self.firmware_name:
+                self.get_command = 'GET_POSITION'
+                self.set_command = 'SET_GCODE_OFFSET'
+                self.set_command_z = self.set_command + ' Z='
+                self.save_command = 'SAVE_CONFIG'
+            self._printer.commands([self.get_command])
         elif event == Events.FIRMWARE_DATA:
             self._logger.debug('Get firmware data: %s - %s',
                                payload.get('name'), payload.get('data'))
             firmware_name = payload.get('name')
             if firmware_name:
-                self.prusa_firmware = 'prusa' in firmware_name.lower()
+                self.firmware_name = firmware_name.lower()
 
     def set_z_offset_from_printer_response(self, offset):
         offset = offset.strip().replace(' ', '').replace('"', '')
@@ -110,8 +119,8 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
         self._send_message('z_offset', self.z_offset)
 
     def set_z_offset_from_gcode(self, line):
-        offset_map = line.lower().replace('m851', '').split()
-        z_part = list(filter(lambda v: v.startswith('z'), offset_map))
+        offset_map = line.lower().replace(self.set_command.lower(), '').split()
+        z_part = list(filter(lambda v: v.startswith('z'), offset_map)).replace('=', '')
         if not z_part:
             self._logger.warning('Bad M851 response: %s', line)
             return
@@ -120,7 +129,7 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
     def on_printer_gcode_sent(self, comm, phase, cmd, cmd_type, gcode, *args,
                               **kwargs):
         # pylint: disable=too-many-arguments, unused-argument
-        if gcode and 'm851' in gcode.lower() and cmd.replace(gcode, ''):
+        if gcode and self.set_command.lower() in gcode.lower() and cmd.replace(gcode, ''):
             self._logger.debug('Setting z offset from user command %s', cmd)
             self.set_z_offset_from_gcode(cmd.replace(gcode, ''))
 
@@ -155,7 +164,7 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
         elif 'probe z offset:' in line_lower:
             self._logger.debug('Marlin 1.x M851 echo: %s', line_lower)
             self.set_z_offset_from_printer_response(line_lower.split(':')[-1])
-        elif line_lower.endswith('z offset') and self.prusa_firmware:
+        elif line_lower.endswith('z offset') and 'prusa' in self.firmware_name:
             self._logger.debug('Prusa M851 echo: z offset may follow')
             self.prusa_zoffset_following = True
         elif 'z offset' in line_lower:
@@ -165,6 +174,18 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
         elif 'm851' in line_lower or 'probe offset ' in line_lower:
             self._logger.debug('Marlin 2.x M851 echo: %s', line_lower)
             self.set_z_offset_from_gcode(line_lower.replace('probe offset', ''))
+        elif '// gcode: ' in line_lower and 'klipper' in self.firmware_name:
+            # Send: GET_POSITION
+            # Recv: // mcu: stepper_x:0 stepper_y:0 stepper_z:0
+            # Recv: // stepper: stepper_x:0.000000 stepper_y:0.000000 stepper_z:0.000000
+            # Recv: // kinematic: X:0.000000 Y:0.000000 Z:0.000000
+            # Recv: // toolhead: X:0.000000 Y:0.000000 Z:0.000000 E:200.000000
+            # Recv: // gcode: X:0.000000 Y:0.000000 Z:1.177979 E:200.000000
+            # Recv: // gcode base: X:0.000000 Y:0.000000 Z:0.000000 E:0.000000
+            # Recv: // gcode homing: X:0.000000 Y:0.000000 Z:0.000000
+            # Recv: ok
+            self._logger.debug('Klipper GET_POSITION echo: %s', line_lower)
+            self.set_z_offset_from_gcode(line_lower.split(' ')[-2].split(':')[-1])
         elif '?z out of range' in line_lower:
             self._logger.error('Setting z offset: %s', line_lower)
             self._send_message('offset_error', line_lower.replace('?', ''))

@@ -1,6 +1,7 @@
 class ZProbeOffsetViewModel {
   constructor (parameters) {
     this.control = parameters[0]
+    this.commands = {set: '', save: ''}
     this.offsetVal = {actual: ko.observable(undefined), edited: ko.observable(undefined)}
     this.error = {offset: ko.observable(undefined), probe: ko.observable(undefined)}
     this.template = $('#generic_plugin_z_probe_offset')
@@ -11,6 +12,8 @@ class ZProbeOffsetViewModel {
   onBeforeBinding() {
     this.request('GET', null, null, (data) => {
       this.error.probe(data.printer_cap.z_probe == 0 ? true : false)
+      this.commands.set = data.set_command
+      this.commands.save = data.save_command
       this.offsetVal.actual(data.z_offset)
       this.offsetVal.edited(data.z_offset)
     })
@@ -37,8 +40,8 @@ class ZProbeOffsetViewModel {
 
   set() {
     if (!this.submit_enabled()) return
-    OctoPrint.control.sendGcode(`M851Z${this.offsetVal.edited()}`)
-    setTimeout(() => {OctoPrint.control.sendGcode('M500')}, 1000)
+    OctoPrint.control.sendGcode(this.commands.set + this.offsetVal.edited())
+    setTimeout(() => {OctoPrint.control.sendGcode(this.commands.save)}, 1000)
   }
 
   submit_enabled() {
