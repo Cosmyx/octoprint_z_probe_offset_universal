@@ -12,7 +12,7 @@ class ZProbeOffsetViewModel {
   onBeforeBinding() {
     this.request('GET', null, null, (data) => {
       this.error.probe(data.printer_cap.z_probe == 0 ? true : false)
-      this.commands.set = data.set_command
+      this.commands.set = data.set_command_z
       this.commands.save = data.save_command
       this.offsetVal.actual(data.z_offset)
       this.offsetVal.edited(data.z_offset)
