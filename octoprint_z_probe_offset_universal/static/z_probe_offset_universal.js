@@ -6,13 +6,15 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var ZProbeOffsetViewModel =
-/*#__PURE__*/
-function () {
+var ZProbeOffsetViewModel = /*#__PURE__*/function () {
   function ZProbeOffsetViewModel(parameters) {
     _classCallCheck(this, ZProbeOffsetViewModel);
 
     this.control = parameters[0];
+    this.commands = {
+      set: '',
+      save: ''
+    };
     this.offsetVal = {
       actual: ko.observable(undefined),
       edited: ko.observable(undefined)
@@ -33,6 +35,9 @@ function () {
 
       this.request('GET', null, null, function (data) {
         _this.error.probe(data.printer_cap.z_probe == 0 ? true : false);
+
+        _this.commands.set = data.set_command_z;
+        _this.commands.save = data.save_command;
 
         _this.offsetVal.actual(data.z_offset);
 
@@ -59,10 +64,12 @@ function () {
   }, {
     key: "set",
     value: function set() {
+      var _this2 = this;
+
       if (!this.submit_enabled()) return;
-      OctoPrint.control.sendGcode("M851Z".concat(this.offsetVal.edited()));
+      OctoPrint.control.sendGcode(this.commands.set + this.offsetVal.edited());
       setTimeout(function () {
-        OctoPrint.control.sendGcode('M500');
+        OctoPrint.control.sendGcode(_this2.commands.save);
       }, 1000);
     }
   }, {

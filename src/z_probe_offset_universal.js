@@ -19,6 +19,7 @@ class ZProbeOffsetViewModel {
     })
   }
 
+
   onDataUpdaterPluginMessage(plugin, data) {
     if (plugin != 'z_probe_offset') return
     if (data.type == 'z_offset')

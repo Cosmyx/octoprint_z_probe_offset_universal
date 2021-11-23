@@ -18,7 +18,7 @@ import subprocess
 from time import sleep
 from inotify_simple import INotify, flags
 
-BASE_FOLDER = 'octoprint_z_probe_offset'
+BASE_FOLDER = 'octoprint_z_probe_offset_universal'
 # WATCH_FOLDER = os.path.join(BASE_FOLDER, 'src')
 WATCH_FOLDER = 'src'
 PUG_FOLDER = os.path.join(BASE_FOLDER, 'templates')
