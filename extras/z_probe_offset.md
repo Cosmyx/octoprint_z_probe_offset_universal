@@ -4,7 +4,7 @@ layout: plugin
 id: z_probe_offset_univeral
 title: Z Probe Offset Universal Control
 description: Control the z probe offset on marlin/prusa/klipper based printers.
-author: cosmyx
+author: Cosmyx
 license: AGPLv3
 date: 2021-11-23
 
