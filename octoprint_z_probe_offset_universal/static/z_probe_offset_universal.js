@@ -57,8 +57,12 @@ var ZProbeOffsetUniversalViewModel = /*#__PURE__*/function () {
   }, {
     key: "set",
     value: function set() {
-      if (!this.submit_enabled()) return;
-      this.request('POST', 'set', this.offsetVal.edited(), null);
+      if (!this.submit_enabled()) return; // this.request('POST', 'set', { offset: this.offsetVal.edited() }, null)
+      // const OctoPrint = window.OctoPrint
+
+      OctoPrint.simpleApiCommand('z_probe_offset_universal', 'set', {
+        offset: this.offsetVal.edited()
+      });
     }
   }, {
     key: "submit_enabled",

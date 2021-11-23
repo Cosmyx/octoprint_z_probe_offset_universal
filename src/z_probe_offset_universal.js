@@ -37,8 +37,9 @@ class ZProbeOffsetUniversalViewModel {
 
   set() {
     if (!this.submit_enabled()) return
-    this.request('POST', 'set', { offset: this.offsetVal.edited() }, null)
-    // OctoPrint.simpleApiCommand("z_probe_offset_universal", "set", {offset: 'value'})
+    // this.request('POST', 'set', { offset: this.offsetVal.edited() }, null)
+    // const OctoPrint = window.OctoPrint
+    OctoPrint.simpleApiCommand('z_probe_offset_universal', 'set', { offset: this.offsetVal.edited() })
   }
 
   submit_enabled() {
