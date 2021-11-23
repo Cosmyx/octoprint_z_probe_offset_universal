@@ -58,7 +58,7 @@ class ZProbeOffsetViewModel {
       if (command) return JSON.stringify({command: command})
     }
     $.ajax({
-      url: `/api${PLUGIN_BASEURL}z_probe_offset`,
+      url: `/api${PLUGIN_BASEURL}z_probe_offset_universal`,
       type: type,
       dataType: 'json',
       data: data(),

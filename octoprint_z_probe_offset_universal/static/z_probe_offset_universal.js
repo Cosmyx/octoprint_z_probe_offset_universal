@@ -94,7 +94,7 @@ var ZProbeOffsetViewModel = /*#__PURE__*/function () {
       };
 
       $.ajax({
-        url: "/api".concat(PLUGIN_BASEURL, "z_probe_offset"),
+        url: "/api".concat(PLUGIN_BASEURL, "z_probe_offset_universal"),
         type: type,
         dataType: 'json',
         data: data(),

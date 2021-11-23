@@ -53,7 +53,7 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
                             octoprint.plugin.TemplatePlugin):
 
     def initialize(self):
-        self._version = '0.5'
+        self._version = '0.6'
         self._plugin_version = self._version
         self.z_offset = None
         self.printer_cap = {'eeprom': None, 'z_probe': None}
@@ -66,7 +66,7 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
 
     def get_update_information(self):
         return dict(Z_probe_offset=dict(
-            displayName='Z Probe Offset Control',
+            displayName='Z Probe Offset Universal Control',
             displayVersion=self._plugin_version,
             current=self._plugin_version,
             type='python_checker',
