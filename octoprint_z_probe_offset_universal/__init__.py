@@ -85,9 +85,12 @@ class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
         return flask.jsonify(printer_cap=self.printer_cap,
                              z_offset=self.z_offset)
 
+    def get_api_commands():
+        return { 'set': ['offset'] }
+
     def on_api_command(self, command, data):
         if command == 'set':
-            self._printer.commands([self.set_command_z + data])
+            self._printer.commands([self.set_command_z + data['offset']])
             t = Timer(1.0, lambda s: s._printer.commands([s.save_command]), self)
             t.start()
 
