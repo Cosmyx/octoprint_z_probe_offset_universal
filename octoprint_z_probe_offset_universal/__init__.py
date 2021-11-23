@@ -197,7 +197,7 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
             self._identifier,
             dict(type=msg_type, msg=message))
 
-__plugin_name__ = 'Z Probe Offset'
+__plugin_name__ = 'Z Probe Offset Universal'
 __plugin_pythoncompat__ = ">=2.7,<4"
 
 def __plugin_load__():

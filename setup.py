@@ -5,7 +5,7 @@ from setuptools import setup
 plugin_identifier = 'z_probe_offset_universal'
 plugin_package = 'octoprint_z_probe_offset_universal'
 plugin_name = 'Z Probe Offset Universal Control'
-plugin_version = '0.5'
+plugin_version = '0.6'
 plugin_description = ('Control the z probe offset on marlin/prusa/klipper based printers.')
 plugin_author = 'razer'
 plugin_author_email = 'razerraz@free.fr'
