@@ -119,7 +119,7 @@ class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
         self._send_message('z_offset', self.z_offset)
 
     def set_z_offset_from_gcode(self, line):
-        offset_map = line.lower().replace(self.set_command.lower(), '').split()
+        offset_map = line.lower().replace(self.set_command.lower(), '').replace(':', '').split()
         z_part = list(filter(lambda v: v.startswith('z'), offset_map))
         if not z_part:
             self._logger.warning('Bad %s response: %s', self.get_command, line)
@@ -185,7 +185,7 @@ class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
             # Recv: // gcode homing: X:0.000000 Y:0.000000 Z:0.000000
             # Recv: ok
             self._logger.debug('Klipper GET_POSITION echo: %s', line_lower)
-            self.set_z_offset_from_gcode(line_lower.split(' ')[-2].split(':')[-1])
+            self.set_z_offset_from_gcode(line_lower.split(' ')[-2])
         elif '?z out of range' in line_lower:
             self._logger.error('Setting z offset: %s', line_lower)
             self._send_message('offset_error', line_lower.replace('?', ''))
