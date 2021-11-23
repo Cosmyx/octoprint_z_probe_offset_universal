@@ -47,7 +47,7 @@ class _VersionCheck:
 
 
 # pylint: disable=attribute-defined-outside-init
-class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
+class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
                             octoprint.plugin.EventHandlerPlugin,
                             octoprint.plugin.SimpleApiPlugin,
                             octoprint.plugin.TemplatePlugin):
@@ -65,7 +65,7 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
         self.prusa_zoffset_following = False
 
     def get_update_information(self):
-        return dict(Z_probe_offset=dict(
+        return dict(Z_probe_offset_universal=dict(
             displayName='Z Probe Offset Universal Control',
             displayVersion=self._plugin_version,
             current=self._plugin_version,
@@ -203,7 +203,7 @@ __plugin_pythoncompat__ = ">=2.7,<4"
 def __plugin_load__():
     # pylint: disable=global-variable-undefined
     global __plugin_implementation__
-    __plugin_implementation__ = Z_probe_offset_plugin()
+    __plugin_implementation__ = Z_probe_offset_universal_plugin()
 
     global __plugin_hooks__
     __plugin_hooks__ = {

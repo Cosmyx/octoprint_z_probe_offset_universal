@@ -1,11 +1,11 @@
-class ZProbeOffsetViewModel {
+class ZProbeOffsetUniversalViewModel {
   constructor (parameters) {
     this.control = parameters[0]
     this.commands = {set: '', save: ''}
     this.offsetVal = {actual: ko.observable(undefined), edited: ko.observable(undefined)}
     this.error = {offset: ko.observable(undefined), probe: ko.observable(undefined)}
-    this.template = $('#generic_plugin_z_probe_offset')
-    this.control.z_probe_offset = this
+    this.template = $('#generic_plugin_z_probe_offset_universal')
+    this.control.z_probe_offset_universal = this
     $("#control-jog-general").append(this.template.html())
   }
 
@@ -21,7 +21,7 @@ class ZProbeOffsetViewModel {
 
 
   onDataUpdaterPluginMessage(plugin, data) {
-    if (plugin != 'z_probe_offset') return
+    if (plugin != 'z_probe_offset_universal') return
     if (data.type == 'z_offset')
       this.offsetVal.actual(data.msg)
     else if (data.type == 'printer_cap') {

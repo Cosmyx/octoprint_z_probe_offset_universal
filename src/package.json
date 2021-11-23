@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "convert": "babel z_probe_offset_universal.js -o ../octoprint_z_probe_offset_universal/static/z_probe_offset_universal.js"
+    "convert": "babel z_probe_offset_universal.js -o ../octoprint_z_probe_offset_universal/static/z_probe_offset_universal.js && pypugjs -c jinja z_probe_offset_universal.pug ../octoprint_z_probe_offset_universal/templates/z_probe_offset_universal.jinja2"
   },
   "dependencies": {
     "@babel/cli": "^7.16.0",

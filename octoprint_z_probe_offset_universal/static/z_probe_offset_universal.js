@@ -6,9 +6,9 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var ZProbeOffsetViewModel = /*#__PURE__*/function () {
-  function ZProbeOffsetViewModel(parameters) {
-    _classCallCheck(this, ZProbeOffsetViewModel);
+var ZProbeOffsetUniversalViewModel = /*#__PURE__*/function () {
+  function ZProbeOffsetUniversalViewModel(parameters) {
+    _classCallCheck(this, ZProbeOffsetUniversalViewModel);
 
     this.control = parameters[0];
     this.commands = {
@@ -23,12 +23,12 @@ var ZProbeOffsetViewModel = /*#__PURE__*/function () {
       offset: ko.observable(undefined),
       probe: ko.observable(undefined)
     };
-    this.template = $('#generic_plugin_z_probe_offset');
-    this.control.z_probe_offset = this;
+    this.template = $('#generic_plugin_z_probe_offset_universal');
+    this.control.z_probe_offset_universal = this;
     $("#control-jog-general").append(this.template.html());
   }
 
-  _createClass(ZProbeOffsetViewModel, [{
+  _createClass(ZProbeOffsetUniversalViewModel, [{
     key: "onBeforeBinding",
     value: function onBeforeBinding() {
       var _this = this;
@@ -47,7 +47,7 @@ var ZProbeOffsetViewModel = /*#__PURE__*/function () {
   }, {
     key: "onDataUpdaterPluginMessage",
     value: function onDataUpdaterPluginMessage(plugin, data) {
-      if (plugin != 'z_probe_offset') return;
+      if (plugin != 'z_probe_offset_universal') return;
       if (data.type == 'z_offset') this.offsetVal.actual(data.msg);else if (data.type == 'printer_cap') {
         var printer_cap = JSON.parse(data.msg);
         this.error.probe(printer_cap.z_probe == 1 ? false : true);
@@ -106,7 +106,7 @@ var ZProbeOffsetViewModel = /*#__PURE__*/function () {
     }
   }]);
 
-  return ZProbeOffsetViewModel;
+  return ZProbeOffsetUniversalViewModel;
 }();
 
 OCTOPRINT_VIEWMODELS.push({
