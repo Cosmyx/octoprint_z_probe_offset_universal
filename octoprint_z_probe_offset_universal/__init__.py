@@ -119,10 +119,10 @@ class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
         self._send_message('z_offset', self.z_offset)
 
     def set_z_offset_from_gcode(self, line):
-        offset_map = line.lower().replace(self.set_command.lower(), '').replace('=', '').split()
+        offset_map = line.lower().replace(self.set_command.lower(), '').split()
         z_part = list(filter(lambda v: v.startswith('z'), offset_map))
         if not z_part:
-            self._logger.warning('Bad M851 response: %s', line)
+            self._logger.warning('Bad %s response: %s', self.get_command, line)
             return
         self.set_z_offset_from_printer_response(z_part[0][1:])
 
