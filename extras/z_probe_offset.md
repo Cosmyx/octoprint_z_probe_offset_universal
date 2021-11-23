@@ -10,7 +10,7 @@ date: 2020-06-14
 
 homepage: https://framagit.org/razer/octoprint_z_probe_offset
 source: https://framagit.org/razer/octoprint_z_probe_offset
-archive: https://framagit.org/razer/octoprint_z_probe_offset/-/archive/latest/octoprint_z_probe_offset-latest.zip
+archive: https://framagit.org/razer/octoprint_z_probe_offset_universal/-/archive/latest/octoprint_z_probe_offset-latest.zip
 
 featuredimage: /assets/img/plugins/z_probe_offset/z_probe_offset_control_universal.png
 

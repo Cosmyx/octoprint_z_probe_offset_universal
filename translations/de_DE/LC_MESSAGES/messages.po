@@ -19,23 +19,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
 
-#: octoprint_z_probe_offset/templates/z_probe_offset.jinja2:3
+#: octoprint_z_probe_offset_universal/templates/z_probe_offset.jinja2:3
 msgid "Z probe offset:"
 msgstr "Z-Sondenversatz:"
 
-#: octoprint_z_probe_offset/templates/z_probe_offset.jinja2:6
+#: octoprint_z_probe_offset_universal/templates/z_probe_offset.jinja2:6
 msgid "Decrease z offset"
 msgstr "Z-Versatz verringern"
 
-#: octoprint_z_probe_offset/templates/z_probe_offset.jinja2:9
+#: octoprint_z_probe_offset_universal/templates/z_probe_offset.jinja2:9
 msgid "Z probe offset value"
 msgstr "Z-Sondenversatzwert"
 
-#: octoprint_z_probe_offset/templates/z_probe_offset.jinja2:12
+#: octoprint_z_probe_offset_universal/templates/z_probe_offset.jinja2:12
 msgid "Increase z offset"
 msgstr "Erhöhen Sie den z-Versatz"
 
-#: octoprint_z_probe_offset/templates/z_probe_offset.jinja2:20
+#: octoprint_z_probe_offset_universal/templates/z_probe_offset.jinja2:20
 msgid "No available probe found"
 msgstr "Keine verfügbare Sonde gefunden"
 
