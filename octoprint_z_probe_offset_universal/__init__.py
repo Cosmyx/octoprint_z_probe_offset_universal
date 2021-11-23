@@ -189,7 +189,7 @@ class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
         elif '?z out of range' in line_lower:
             self._logger.error('Setting z offset: %s', line_lower)
             self._send_message('offset_error', line_lower.replace('?', ''))
-            self._printer.commands(['M851'])
+            self._printer.commands([self.get_command])
         return line
 
     def _send_message(self, msg_type, message):

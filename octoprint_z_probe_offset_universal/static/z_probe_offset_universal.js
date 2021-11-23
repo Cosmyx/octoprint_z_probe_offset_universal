@@ -110,6 +110,6 @@ var ZProbeOffsetUniversalViewModel = /*#__PURE__*/function () {
 }();
 
 OCTOPRINT_VIEWMODELS.push({
-  construct: ZProbeOffsetViewModel,
+  construct: ZProbeOffsetUniversalViewModel,
   dependencies: ['controlViewModel']
 });

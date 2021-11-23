@@ -70,6 +70,6 @@ class ZProbeOffsetUniversalViewModel {
 
 
 OCTOPRINT_VIEWMODELS.push({
-  construct: ZProbeOffsetViewModel,
+  construct: ZProbeOffsetUniversalViewModel,
   dependencies: ['controlViewModel'],
 });
