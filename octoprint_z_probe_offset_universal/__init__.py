@@ -87,19 +87,19 @@ class Z_probe_offset_plugin(octoprint.plugin.AssetPlugin,
         if event == 'Disconnected':
             self.printer_cap = {'eeprom': None, 'z_probe': None}
             self._send_message('printer_cap', json.dumps(self.printer_cap))
-        elif event == 'Connected':
-            if 'klipper' in self.firmware_name:
-                self.get_command = 'GET_POSITION'
-                self.set_command = 'SET_GCODE_OFFSET'
-                self.set_command_z = self.set_command + ' Z='
-                self.save_command = 'SAVE_CONFIG'
-            self._printer.commands([self.get_command])
+        # elif event == 'Connected':
         elif event == Events.FIRMWARE_DATA:
             self._logger.debug('Get firmware data: %s - %s',
                                payload.get('name'), payload.get('data'))
             firmware_name = payload.get('name')
             if firmware_name:
                 self.firmware_name = firmware_name.lower()
+            if 'klipper' in self.firmware_name:
+                self.get_command = 'GET_POSITION'
+                self.set_command = 'SET_GCODE_OFFSET'
+                self.set_command_z = self.set_command + ' Z='
+                self.save_command = 'SAVE_CONFIG'
+            self._printer.commands([self.get_command])
 
     def set_z_offset_from_printer_response(self, offset):
         offset = offset.strip().replace(' ', '').replace('"', '')
