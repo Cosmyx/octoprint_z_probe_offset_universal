@@ -5,6 +5,8 @@ import threading
 import flask
 import requests
 from requests.exceptions import ConnectionError as ConnErr, ConnectTimeout
+from threading import Timer
+
 import octoprint.plugin  # pylint: disable=import-error
 from octoprint.events import Events  # pylint: disable=import-error
 
@@ -82,6 +84,12 @@ class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
     def on_api_get(self, unused_request):
         return flask.jsonify(printer_cap=self.printer_cap,
                              z_offset=self.z_offset)
+
+    def on_api_command(self, command, data):
+        if command == 'set':
+            self._printer.commands([self.set_command_z + data])
+            t = Timer(1.0, lambda s: s._printer.commands([s.save_command]), self)
+            t.start()
 
     def on_event(self, event, payload):
         if event == 'Disconnected':

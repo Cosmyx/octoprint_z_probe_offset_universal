@@ -1,7 +1,6 @@
 class ZProbeOffsetUniversalViewModel {
   constructor (parameters) {
     this.control = parameters[0]
-    this.commands = {set: '', save: ''}
     this.offsetVal = {actual: ko.observable(undefined), edited: ko.observable(undefined)}
     this.error = {offset: ko.observable(undefined), probe: ko.observable(undefined)}
     this.template = $('#generic_plugin_z_probe_offset_universal')
@@ -12,13 +11,10 @@ class ZProbeOffsetUniversalViewModel {
   onBeforeBinding() {
     this.request('GET', null, null, (data) => {
       this.error.probe(data.printer_cap.z_probe == 0 ? true : false)
-      this.commands.set = data.set_command_z
-      this.commands.save = data.save_command
       this.offsetVal.actual(data.z_offset)
       this.offsetVal.edited(data.z_offset)
     })
   }
-
 
   onDataUpdaterPluginMessage(plugin, data) {
     if (plugin != 'z_probe_offset_universal') return
@@ -41,8 +37,7 @@ class ZProbeOffsetUniversalViewModel {
 
   set() {
     if (!this.submit_enabled()) return
-    OctoPrint.control.sendGcode(this.commands.set + this.offsetVal.edited())
-    setTimeout(() => {OctoPrint.control.sendGcode(this.commands.save)}, 1000)
+    this.request('POST', 'set', this.offsetVal.edited(), null)
   }
 
   submit_enabled() {

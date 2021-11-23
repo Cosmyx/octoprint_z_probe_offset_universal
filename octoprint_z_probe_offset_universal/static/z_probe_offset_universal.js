@@ -11,10 +11,6 @@ var ZProbeOffsetUniversalViewModel = /*#__PURE__*/function () {
     _classCallCheck(this, ZProbeOffsetUniversalViewModel);
 
     this.control = parameters[0];
-    this.commands = {
-      set: '',
-      save: ''
-    };
     this.offsetVal = {
       actual: ko.observable(undefined),
       edited: ko.observable(undefined)
@@ -35,9 +31,6 @@ var ZProbeOffsetUniversalViewModel = /*#__PURE__*/function () {
 
       this.request('GET', null, null, function (data) {
         _this.error.probe(data.printer_cap.z_probe == 0 ? true : false);
-
-        _this.commands.set = data.set_command_z;
-        _this.commands.save = data.save_command;
 
         _this.offsetVal.actual(data.z_offset);
 
@@ -64,13 +57,8 @@ var ZProbeOffsetUniversalViewModel = /*#__PURE__*/function () {
   }, {
     key: "set",
     value: function set() {
-      var _this2 = this;
-
       if (!this.submit_enabled()) return;
-      OctoPrint.control.sendGcode(this.commands.set + this.offsetVal.edited());
-      setTimeout(function () {
-        OctoPrint.control.sendGcode(_this2.commands.save);
-      }, 1000);
+      this.request('POST', 'set', this.offsetVal.edited(), null);
     }
   }, {
     key: "submit_enabled",
