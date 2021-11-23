@@ -8,42 +8,42 @@ from requests.exceptions import ConnectionError as ConnErr, ConnectTimeout
 import octoprint.plugin  # pylint: disable=import-error
 from octoprint.events import Events  # pylint: disable=import-error
 
-GIT_PROJECT_ID = '63729'
-GIT_NAME = 'Octoprint_Z_probe_offset'
-GIT_USER = 'razer'
+# GIT_PROJECT_ID = '63729'
+# GIT_NAME = 'Octoprint_Z_probe_offset'
+# GIT_USER = 'razer'
 
-GIT_URL = 'https://framagit.org'
-GIT_RELEASES = GIT_URL + '/api/v4/projects/' + GIT_PROJECT_ID + '/releases'
-GIT_ARCHIVES = GIT_URL + '/' + GIT_USER + '/' + GIT_NAME + '/-/archive'
+# GIT_URL = 'https://framagit.org'
+# GIT_RELEASES = GIT_URL + '/api/v4/projects/' + GIT_PROJECT_ID + '/releases'
+# GIT_ARCHIVES = GIT_URL + '/' + GIT_USER + '/' + GIT_NAME + '/-/archive'
 
-class _VersionCheck:
-    @classmethod
-    def get_remote_version(cls):
-        try:
-            req = requests.get(GIT_RELEASES, timeout=5)
-        except (ConnErr, ConnectTimeout):
-            return None
-        response = req.json()
-        if not response or not isinstance(response, list):
-            return None
-        tag_map = map(lambda r: r['tag_name'], response)
-        release_map = filter(lambda v: v.replace('.', '').isdigit(), tag_map)
-        release_map = list(map(float, release_map))
-        release_map.sort(reverse=True)
-        if not release_map:
-            return None
-        return str(release_map[0])
+# class _VersionCheck:
+#     @classmethod
+#     def get_remote_version(cls):
+#         try:
+#             req = requests.get(GIT_RELEASES, timeout=5)
+#         except (ConnErr, ConnectTimeout):
+#             return None
+#         response = req.json()
+#         if not response or not isinstance(response, list):
+#             return None
+#         tag_map = map(lambda r: r['tag_name'], response)
+#         release_map = filter(lambda v: v.replace('.', '').isdigit(), tag_map)
+#         release_map = list(map(float, release_map))
+#         release_map.sort(reverse=True)
+#         if not release_map:
+#             return None
+#         return str(release_map[0])
 
-    @classmethod
-    def get_latest(cls, target, check, full_data=False, online=True):
-        # pylint: disable=unused-argument
-        current_version = check.get('current', '1.0.0')
-        remote_version = current_version
-        if online:
-            remote_version = cls.get_remote_version() or current_version
-        info = dict(local=dict(name=current_version, value=current_version),
-                    remote=dict(name=remote_version, value=remote_version))
-        return info, remote_version == current_version
+#     @classmethod
+#     def get_latest(cls, target, check, full_data=False, online=True):
+#         # pylint: disable=unused-argument
+#         current_version = check.get('current', '1.0.0')
+#         remote_version = current_version
+#         if online:
+#             remote_version = cls.get_remote_version() or current_version
+#         info = dict(local=dict(name=current_version, value=current_version),
+#                     remote=dict(name=remote_version, value=remote_version))
+#         return info, remote_version == current_version
 
 
 # pylint: disable=attribute-defined-outside-init
