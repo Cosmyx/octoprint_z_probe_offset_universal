@@ -1,4 +1,4 @@
 include README.md
-recursive-include octoprint_z_probe_offset/templates *
-recursive-include octoprint_z_probe_offset/translations *
-recursive-include octoprint_z_probe_offset/static *
+recursive-include octoprint_z_probe_offset_universal/templates *
+recursive-include octoprint_z_probe_offset_universal/translations *
+recursive-include octoprint_z_probe_offset_universal/static *

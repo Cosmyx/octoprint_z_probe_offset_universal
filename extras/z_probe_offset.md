@@ -1,9 +1,9 @@
 ---
 layout: plugin
 
-id: z_probe_offset
-title: Z Probe Offset Control
-description: Control the z probe offset on marlin based printers.
+id: z_probe_offset_univeral
+title: Z Probe Offset Universal Control
+description: Control the z probe offset on marlin/prusa/klipper based printers.
 author: razer
 license: AGPLv3
 date: 2020-06-14
@@ -17,6 +17,8 @@ featuredimage: /assets/img/plugins/z_probe_offset/z_probe_offset_control.png
 tags:
 - probe
 - marlin
+- klipper
+- prusa
 
 compatibility:
   octoprint:
@@ -30,6 +32,6 @@ compatibility:
 # Z Probe Offset Control
 
 Add input to the control tab for z probe offset value change.
-Needs Marlin firmware (1.x or 2.x) with z probe capability enabled.
+Needs firmware with z probe capability enabled.
 
 ![screenshot](/assets/img/plugins/z_probe_offset/z_probe_offset_control.png)
