@@ -200,7 +200,7 @@ class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
             # Recv: ok
             self._logger.debug('Klipper GET_POSITION echo: %s', line_lower)
             self.set_z_offset_from_gcode(line_lower.split(' ')[-2])
-        elif self.klipper_prepend + 'Klipper state: Ready' in line_lower:
+        elif self.klipper_prepend + 'klipper state: ready' in line_lower:
             self._printer.commands([self.get_command])
         elif '?z out of range' in line_lower:
             self._logger.error('Setting z offset: %s', line_lower)
