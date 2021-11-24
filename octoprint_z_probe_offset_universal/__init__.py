@@ -185,7 +185,7 @@ class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
         elif 'm851' in line_lower or 'probe offset ' in line_lower:
             self._logger.debug('Marlin 2.x M851 echo: %s', line_lower)
             self.set_z_offset_from_gcode(line_lower.replace('probe offset', ''))
-        elif '// gcode: ' in line_lower and 'klipper' in self.firmware_name:
+        elif '// gcode base: ' in line_lower and 'klipper' in self.firmware_name:
             # Send: GET_POSITION
             # Recv: // mcu: stepper_x:0 stepper_y:0 stepper_z:0
             # Recv: // stepper: stepper_x:0.000000 stepper_y:0.000000 stepper_z:0.000000
