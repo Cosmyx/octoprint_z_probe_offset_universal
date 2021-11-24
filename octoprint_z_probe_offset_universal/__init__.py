@@ -90,7 +90,7 @@ class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
 
     def on_api_command(self, command, data):
         if command == 'set':
-            self._printer.commands([self.set_command_z + data['offset']])
+            self._printer.commands([self.set_command_z + str(data['offset'])])
             t = Timer(1.0, lambda s: s._printer.commands([s.save_command]), self)
             t.start()
 
