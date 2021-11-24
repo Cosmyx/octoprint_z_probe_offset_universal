@@ -65,6 +65,7 @@ class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
         self.set_command_z = self.set_command + 'Z'
         self.save_command = 'M500'
         self.prusa_zoffset_following = False
+        self.klipper_prepend = '// '
 
     def get_update_information(self):
         return dict(Z_probe_offset_universal=dict(
@@ -187,7 +188,7 @@ class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
         elif 'm851' in line_lower or 'probe offset ' in line_lower:
             self._logger.debug('Marlin 2.x M851 echo: %s', line_lower)
             self.set_z_offset_from_gcode(line_lower.replace('probe offset', ''))
-        elif '// gcode base: ' in line_lower and 'klipper' in self.firmware_name:
+        elif self.klipper_prepend + 'gcode base: ' in line_lower and 'klipper' in self.firmware_name:
             # Send: GET_POSITION
             # Recv: // mcu: stepper_x:0 stepper_y:0 stepper_z:0
             # Recv: // stepper: stepper_x:0.000000 stepper_y:0.000000 stepper_z:0.000000
@@ -199,6 +200,8 @@ class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
             # Recv: ok
             self._logger.debug('Klipper GET_POSITION echo: %s', line_lower)
             self.set_z_offset_from_gcode(line_lower.split(' ')[-2])
+        elif self.klipper_prepend + 'Klipper state: Ready' in line_lower:
+            self._printer.commands([self.get_command])
         elif '?z out of range' in line_lower:
             self._logger.error('Setting z offset: %s', line_lower)
             self._send_message('offset_error', line_lower.replace('?', ''))
