@@ -91,6 +91,8 @@ class Z_probe_offset_universal_plugin(octoprint.plugin.AssetPlugin,
     def on_api_command(self, command, data):
         if command == 'set':
             self._printer.commands([self.set_command_z + str(data['offset'])])
+            if 'klipper' in self.firmware_name:
+                self._printer.commands([self.get_command])
             t = Timer(1.0, lambda s: s._printer.commands([s.save_command]), self)
             t.start()
 
